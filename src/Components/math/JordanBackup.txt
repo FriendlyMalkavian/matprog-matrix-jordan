@@ -1,0 +1,39 @@
+const Matrix = [[-3., 5., -3.], [-1., -2., 2.]];
+
+function JordanMatrix(matrix, kNumber, sNumber) {
+    const secondCopy = Array.from(matrix);
+    const stringMatrix = secondCopy.toString();
+  if (matrix[kNumber][sNumber] == 0) {
+    return console.log("Вы пытаетесь выбрать нулевой элемент");
+  } else {
+    const matrixCopy = matrix.slice();
+    const matrixResult = matrixCopy;
+    const acceptElement = matrixResult[kNumber][sNumber];
+    for (let l = 0; l < matrixResult.length; l++) {
+      for (let u = 0; u < matrixResult[0].length; u++) {
+        if (l != kNumber && u != sNumber) {
+          matrixResult[l][u] =
+            matrixCopy[l][u] -
+            matrixCopy[l][sNumber] * matrixCopy[kNumber][u] / acceptElement;
+        }
+      }
+    }
+    for (let i = 0; i < matrixCopy[0].length; i++) { // используем копию матрицы
+      if (i != sNumber) {
+        matrixResult[kNumber][i] = matrixCopy[kNumber][i] / acceptElement;
+      }
+    }
+    for (let j = 0; j < matrixCopy.length; j++) { // используем копию матрицы
+      if (j != kNumber) {
+        matrixResult[j][sNumber] =
+          -matrixCopy[j][sNumber] / acceptElement;
+      }
+    }
+    matrixResult[kNumber][sNumber] = 1 / acceptElement;
+    return {
+      matrixResult,
+      stringMatrix
+    };
+  }
+}
+export default JordanMatrix;
