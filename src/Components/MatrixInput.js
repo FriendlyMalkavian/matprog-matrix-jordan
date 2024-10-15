@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MatrixTable from './MatrixTable';
-import JordanMatrix from './math/JordanMatrix'
+import JordanMatrix from './math/JordanMatrix';
 
 const MatrixInput = () => {
   const [rows, setRows] = useState(1);
@@ -40,14 +40,31 @@ const MatrixInput = () => {
     const table = tables[tableIndex];
     const matrix = table.data.rows.map((row) => row.map((cell) => parseFloat(cell)));
     const result = JordanMatrix(matrix, table.selectedRadio.row, table.selectedRadio.col);
-    const newTableData = {
-      headings: Array(cols).fill(''),
-      rows: result.matrixResult.map((row) => {
-        return row.filter((cell, index) => index !== table.selectedRadio.col);
+
+    // Получаем координаты выбранного элемента 
+    const selectedRow = table.selectedRadio.row;
+    const selectedCol = table.selectedRadio.col;
+
+    // Получаем значение из X-таблицы 
+    const newRowValue = table.data.rows[0][selectedCol + 1]; // Убедимся, что индекс правильный
+
+    // Создаем новую Y-таблицу с замененным значением 
+    const newYTableData = {
+      headings: Array(cols - 1).fill(''),
+      rows: result.matrixResult.map((row, rowIndex) => {
+        if (rowIndex === selectedRow) {
+          // Заменяем значение в выбранной строке
+          return row.map((cell, index) => (index === selectedCol ? newRowValue : cell));
+        }
+        return row;
       }),
     };
+
+    // Удаляем ячейку из X-таблицы 
+    newYTableData.rows = newYTableData.rows.map((row) => row.filter((_, index) => index !== selectedCol));
+
     const newTable = {
-      data: newTableData,
+      data: newYTableData,
       selectedRadio: { row: -1, col: -1 },
     };
     setTables([...tables, newTable]);
@@ -58,8 +75,7 @@ const MatrixInput = () => {
       <h1>Жордановы преобразования</h1>
       <label>
         Сколько строчек:
-        <input
-          type="number"
+        <input type="number"
           value={rows}
           onChange={(e) => setRows(parseInt(e.target.value, 10))}
         />
@@ -67,8 +83,7 @@ const MatrixInput = () => {
       <br />
       <label>
         Сколько столбиков:
-        <input
-          type="number"
+        <input type="number"
           value={cols}
           onChange={(e) => setCols(parseInt(e.target.value, 10))}
         />
@@ -90,3 +105,4 @@ const MatrixInput = () => {
 };
 
 export default MatrixInput;
+
