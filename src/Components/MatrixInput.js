@@ -40,29 +40,31 @@ const MatrixInput = () => {
     const table = tables[tableIndex];
     const matrix = table.data.rows.map((row) => row.map((cell) => parseFloat(cell)));
     const result = JordanMatrix(matrix, table.selectedRadio.row, table.selectedRadio.col);
-
+  
     // Получаем координаты выбранного элемента 
     const selectedRow = table.selectedRadio.row;
     const selectedCol = table.selectedRadio.col;
-
+  
     // Получаем значение из X-таблицы 
-    const newRowValue = table.data.rows[0][selectedCol + 1]; // Убедимся, что индекс правильный
-
+    const newRowValue = table.data.rows[0][selectedCol + 1]; // Получаем значение из ячейки (0, selectedCol - 1)
+  
     // Создаем новую Y-таблицу с замененным значением 
     const newYTableData = {
       headings: Array(cols - 1).fill(''),
       rows: result.matrixResult.map((row, rowIndex) => {
         if (rowIndex === selectedRow) {
-          // Заменяем значение в выбранной строке
-          return row.map((cell, index) => (index === selectedCol ? newRowValue : cell));
+          // Заменяем значение в выбранной строке в первой колонке
+          const newRow = [...row]; // Копируем текущую строку
+          newRow[0] = newRowValue; // Заменяем значение в ячейке (selectedRow, 0)
+          return newRow;
         }
         return row;
       }),
     };
-
+  
     // Удаляем ячейку из X-таблицы 
     newYTableData.rows = newYTableData.rows.map((row) => row.filter((_, index) => index !== selectedCol));
-
+  
     const newTable = {
       data: newYTableData,
       selectedRadio: { row: -1, col: -1 },

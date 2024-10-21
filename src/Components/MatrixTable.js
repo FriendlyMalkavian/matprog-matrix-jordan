@@ -14,8 +14,9 @@ function MatrixTable({ data, onTableCellChange, onRadioChange }) {
           <Table style={{ marginBottom: '0' }}>
             <thead>
               <tr>
-                {data.headings.map((_, index) => (
-                  <th key={index} style={{ paddingLeft: index === 0 ? '0' : '150px' }}>x{index + 1}</th>
+                <th style={{ paddingLeft: '0' }}>1</th> {/* Первый заголовок без 'x' */}
+                {Array.from({ length: data.headings.length - 1 }, (_, index) => (
+                  <th key={index + 1} style={{ paddingLeft: '150px' }}>x{index + 1}</th> // Начинаем с x1
                 ))}
               </tr>
             </thead>
