@@ -11,6 +11,7 @@ const MatrixInput = () => {
       rows: Array(rows).fill('').map(() => Array(cols).fill('')),
     },
     selectedRadio: { row: -1, col: -1 },
+    selected: undefined,
   }]);
 
   const handleCreateTable = () => {
@@ -66,6 +67,7 @@ const MatrixInput = () => {
     const newTable = {
       data: newYTableData,
       selectedRadio: { row: -1, col: -1 },
+      selected: { row: selectedRow, col: selectedCol },
     };
     setTables([...tables, newTable]);
   };
@@ -96,6 +98,7 @@ const MatrixInput = () => {
             data={table.data}
             onTableCellChange={(rowIndex, cellIndex, value) => handleTableCellChange(tableIndex, rowIndex, cellIndex, value)}
             onRadioChange={(rowIndex, cellIndex) => handleRadioChange(tableIndex, rowIndex, cellIndex)}
+            selected={table.selected}
           />
           <button onClick={() => handleJordan(tableIndex)}>Использовать преобразования</button>
         </div>

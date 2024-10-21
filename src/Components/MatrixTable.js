@@ -2,7 +2,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import { Container } from 'react-bootstrap';
 
-function MatrixTable({ data, onTableCellChange, onRadioChange }) {
+function MatrixTable({ data, onTableCellChange, onRadioChange, selected }) {
   return (
     <Container className="responsive-container">
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -27,11 +27,7 @@ function MatrixTable({ data, onTableCellChange, onRadioChange }) {
           {/* Table for y values */}
           <Table style={{ marginRight: '10px' }}>
             <tbody>
-              {data.rows.map((_, rowIndex) => (
-                <tr key={rowIndex}>
-                  <td>y{rowIndex + 1}</td> {/* y1, y2, ..., ym */}
-                </tr>
-              ))}
+              {data.rows.map((_, rowIndex) => renderHeaderName(rowIndex, selected))}
             </tbody>
           </Table>
 
@@ -71,3 +67,11 @@ function MatrixTable({ data, onTableCellChange, onRadioChange }) {
 
 export default MatrixTable;
 
+function renderHeaderName(row, selected) {
+  let result = `y${row+ 1}`
+  if(selected !== undefined && selected.row === row) {
+    result = `x${selected.col}`
+  }
+  
+  return <tr key={row}><td>{result}</td></tr>;
+}
